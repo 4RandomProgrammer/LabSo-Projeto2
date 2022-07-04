@@ -14,7 +14,8 @@ int main() {
   while (1) {
     printf("> ");
     fgets(comando, MAX, stdin);
-    printf("TESTE: %s", comando);
+    comando[strlen(comando)-1] = '\0';
+    
     if (!strcmp(comando, "exit")) {
       exit(EXIT_SUCCESS);
     }
@@ -31,13 +32,18 @@ int main() {
       argc++;
     }
     
+    printf("ARGC: %d\n", argc);
+    
+    printf("\nPRINTANDO CADA ARG\n");
     for (int j = 0; j < argc; j++)
-      printf("%s\n", argv[j]);
+      printf("Printando: %s|\n", argv[j]);
 
     pid = fork();
     if (pid) {
-      if (argc <= 1 || argumento[1][0] == "&")
-        waitpid(pid, NULL, 0); 
+      if (argc <= 1 || argv[1][0] != '&') {
+        waitpid(pid, NULL, 0);
+        printf("WAITING\n");
+      }
     } else {
       execlp(argv[0], argv[0], NULL);
       printf("Erro ao executar comando!\n");
